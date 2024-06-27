@@ -1,0 +1,128 @@
+version: '3.7'
+services:
+  config-server:
+    image: irvingmeza95/aureoenvios-config-server:v1
+    ports:
+      - "8888:8888"
+    restart: always
+    networks:
+      - aureoenvios
+  eureka-server:
+    image: irvingmeza95/aureoenvios-eureka-server:v1
+    ports:
+      - "8761:8761"
+    restart: always
+    networks:
+      - aureoenvios
+    depends_on:
+      - config-server
+  mysql8:
+    image: irvingmeza95/mysql:8
+    ports:
+      - "3307:3306"
+    restart: always
+    networks:
+      - aureoenvios
+    environment:
+      MYSQL_DATABASE: aureo_envios_db
+      MYSQL_ROOT_PASSWORD: sasa
+  servicioUsuarios:
+    image: irvingmeza95/aureoenvios-servicio-usuarios:v1
+    ports:
+      - "8000:8000"
+    restart: always
+    networks:
+      - aureoenvios
+    depends_on:
+      - config-server
+      - eureka-server
+      - mysql8
+  filesManagerService:
+    image: irvingmeza95/aureoenvios-files-manager-service:v1
+    # ports:
+    #   - "8001:8001"
+    deploy:
+      replicas: 1
+    restart: always
+    networks:
+      - aureoenvios
+    depends_on:
+      - config-server
+      - eureka-server
+      - servicioUsuarios
+      - mysql8
+  servicioChats:
+    image: irvingmeza95/aureoenvios-servicio-chats:v1
+    # ports:
+    #   - "8002:8002"
+    deploy:
+      replicas: 1
+    restart: always
+    networks:
+      - aureoenvios
+    depends_on:
+      - config-server
+      - eureka-server
+      - servicioUsuarios
+      - wsChatsServer
+      - mysql8
+  servicioEmails:
+    image: irvingmeza95/aureoenvios-servicio-emails:v1
+    # ports:
+    #   - "8003:8003"
+    deploy:
+      replicas: 1
+    restart: always
+    networks:
+      - aureoenvios
+    depends_on:
+      - config-server
+      - eureka-server
+      - servicioUsuarios
+      - mysql8
+  wsChatsServer:
+    image: irvingmeza95/aureoenvios-ws-chats-server:v1
+    # ports:
+    #   - "8081:8081"
+    deploy:
+      replicas: 1
+    restart: always
+    networks:
+      - aureoenvios
+    depends_on:
+      - config-server
+      - eureka-server
+      - servicioUsuarios
+  servicioOauth:
+    image: irvingmeza95/aureoenvios-servicio-oauth:v1
+    # ports:
+    #   - "9100:9100"
+    deploy:
+      replicas: 1
+    restart: always
+    networks:
+      - aureoenvios
+    depends_on:
+      - config-server
+      - eureka-server
+      - servicioUsuarios
+      - servicioEmails
+  gatewayServer:
+    image: irvingmeza95/aureoenvios-gateway-server:v1
+    ports:
+      - "8080:8080"
+    restart: always
+    networks:
+      - aureoenvios
+    depends_on:
+      - config-server
+      - eureka-server
+      - servicioUsuarios
+      - servicioEmails
+      - servicioOauth
+      # - servicioChats
+      # - wsChatsServer
+      # - filesManagerService
+
+networks:
+    aureoenvios:
