@@ -107,6 +107,19 @@ services:
       - eureka-server
       - servicioUsuarios
       - servicioEmails
+  servicioPhones:
+    image: irvingmeza95/aureoenvios-servicio-phones:v1
+    # ports:
+    #   - "8004:8004"
+    deploy:
+      replicas: 1
+    restart: always
+    networks:
+      - aureoenvios
+    depends_on:
+      - config-server
+      - eureka-server
+      - servicioUsuarios
   gatewayServer:
     image: irvingmeza95/aureoenvios-gateway-server:v1
     ports:
@@ -119,6 +132,7 @@ services:
       - eureka-server
       - servicioUsuarios
       - servicioEmails
+      # - servicioPhones
       - servicioOauth
       # - servicioChats
       # - wsChatsServer
