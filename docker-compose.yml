@@ -66,8 +66,8 @@ services:
       - servicioUsuarios
       - wsChatsServer
       - mysql8
-  servicioEmails:
-    image: irvingmeza95/aureoenvios-servicio-emails:v1
+  servicioVerificacion:
+    image: irvingmeza95/aureoenvios-servicio-verificacion:v1
     # ports:
     #   - "8003:8003"
     deploy:
@@ -106,20 +106,6 @@ services:
       - config-server
       - eureka-server
       - servicioUsuarios
-      - servicioEmails
-  servicioPhones:
-    image: irvingmeza95/aureoenvios-servicio-phones:v1
-    # ports:
-    #   - "8004:8004"
-    deploy:
-      replicas: 1
-    restart: always
-    networks:
-      - aureoenvios
-    depends_on:
-      - config-server
-      - eureka-server
-      - servicioUsuarios
   gatewayServer:
     image: irvingmeza95/aureoenvios-gateway-server:v1
     ports:
@@ -131,8 +117,7 @@ services:
       - config-server
       - eureka-server
       - servicioUsuarios
-      - servicioEmails
-      # - servicioPhones
+      - servicioVerificacion
       - servicioOauth
       # - servicioChats
       # - wsChatsServer
