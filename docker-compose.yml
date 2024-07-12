@@ -24,8 +24,9 @@ services:
     networks:
       - aureoenvios
     environment:
-      MYSQL_DATABASE: aureo_envios_db
       MYSQL_ROOT_PASSWORD: sasa
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
   servicioUsuarios:
     image: irvingmeza95/aureoenvios-servicio-usuarios:v1
     ports:
