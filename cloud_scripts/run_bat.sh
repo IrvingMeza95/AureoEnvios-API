@@ -2,7 +2,7 @@
 
 user="root"
 pw="sasa"
-host="localhost"
+host="vps-4110266-x.dattaweb.com"
 port="3307"
 
 # Obtener fecha y hora
@@ -19,7 +19,7 @@ path="/root/DonWeb/Respaldos_db/${nombre}"
 
 # Ejecutar mysqldump y manejar errores
 echo "Haciendo respaldo de la base de datos..."
-if mysqldump -h $host --port=$port -u $user -p$pw aureo_envios_db > $path; then
+if mysqldump --protocol=tcp -h $host --port=$port -u $user -p$pw aureo_envios_db > $path; then
     echo "Respaldo completado exitosamente."
 else
     echo "Error: Fallo el respaldo de la base de datos."
