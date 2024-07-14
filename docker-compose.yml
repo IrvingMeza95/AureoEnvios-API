@@ -119,10 +119,10 @@ services:
       - eureka-server
       - servicioUsuarios
       - servicioVerificacion
+      - filesManagerService
       - servicioOauth
       # - servicioChats
       # - wsChatsServer
-      # - filesManagerService
 
 networks:
     aureoenvios:
